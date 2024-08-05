@@ -14,7 +14,7 @@ const LogoutContent = ({ layout, titleTag: TitleTag }) => {
         alt="shield"
         width={100}
       />
-      <TitleTag>Tekrar Görüşmek Üzere!</TitleTag>
+      <TitleTag className="text-warning">Tekrar Görüşmek Üzere!</TitleTag>
       <p>
         PANTEON'u kullandığınız için teşekkürler. Şuan{" "}
         <br className="d-none d-sm-block" />
@@ -22,7 +22,7 @@ const LogoutContent = ({ layout, titleTag: TitleTag }) => {
       </p>
       <Button
         as={Link}
-        color="primary"
+        color="warning"
         size="sm"
         className="mt-3"
         to={`/authentication/${layout}/login`}

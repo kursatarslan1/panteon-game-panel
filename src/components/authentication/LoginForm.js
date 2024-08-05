@@ -88,6 +88,7 @@ const LoginForm = ({ hasLabel }) => {
         <Button
           type="submit"
           color="primary"
+          variant="warning"
           className="mt-3 w-100"
           disabled={!formData.username || !formData.password || waitLogin}
         >
@@ -95,10 +96,12 @@ const LoginForm = ({ hasLabel }) => {
         </Button>
       </Form.Group>
 
-      <Divider className="mt-4 mb-4">Veya Hemen Kayıt Ol</Divider>
+      <Divider className="mt-4 mb-4 text-warning">Veya Hemen Kayıt Ol</Divider>
 
-      <p className="fs-10 text-600 mb-0 text-center">
-        <Link to="/authentication/simple/register">Hesap Oluştur</Link>
+      <p className="fs-10 text-600 mb-0 text-center text-warning">
+        <Link to="/authentication/simple/register" className="text-warning">
+          Hesap Oluştur
+        </Link>
       </p>
     </Form>
   );

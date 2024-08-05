@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 const Login = () => {
   return (
     <>
-      <h5>Giriş Yap</h5>
+      <h5 className="text-warning">Giriş Yap</h5>
       <LoginForm />
     </>
   );
