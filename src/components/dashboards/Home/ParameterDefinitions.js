@@ -13,6 +13,7 @@ import ParameterDefinitionService from "../../../services/ParameterDefinitionSer
 import ConfigurationService from "../../../services/ConfigurationService";
 import ParameterGroupService from "../../../services/ParameterGroupService";
 import { v4 as uuidv4 } from "uuid";
+import { toast } from "react-toastify";
 
 const ParameterDefinitions = () => {
   const [showModal, setShowModal] = useState(false);
@@ -34,7 +35,7 @@ const ParameterDefinitions = () => {
           await ParameterDefinitionService.getParameterDefinitionList();
         setItems(data);
       } catch (error) {
-        console.log("Error fetching parameter definitions: ", error);
+        toast.error("Parametre tanım kayıtları alınırken bir hata oluştu.");
       } finally {
         setWait(false);
       }
@@ -49,7 +50,9 @@ const ParameterDefinitions = () => {
         );
         setConfigurationParameters(parameters);
       } catch (error) {
-        console.log("Error fetching configuration names: ", error);
+        toast.error(
+          "Ana konfigürasyon parametreleri alınırken bir hata oluştu."
+        );
       }
     };
 
@@ -75,11 +78,9 @@ const ParameterDefinitions = () => {
         setParameterOptions("");
         setParameterValue("");
         setShowModal(false);
+        toast.success("Parametre tanımı başarıyla eklendi.");
       } catch (error) {
-        console.log(
-          "Error adding parameter definition: ",
-          error.response ? error.response.data : error.message
-        );
+        toast.error("Parametre tanımı eklenemedi.");
       }
     }
   };
@@ -88,11 +89,11 @@ const ParameterDefinitions = () => {
     try {
       await ParameterDefinitionService.deleteParameterDefinition(id);
       setItems(items.filter((item) => item.definitionId !== id));
-    } catch (error) {
-      console.log(
-        "Error deleting parameter definition: ",
-        error.response ? error.response.data : error.message
+      toast.success(
+        "Parametre tanımı silindi, lütfen kontrollerinizi yapınız."
       );
+    } catch (error) {
+      toast.error("Parametre tanımı silinemedi.");
     }
   };
 
@@ -104,18 +105,27 @@ const ParameterDefinitions = () => {
   );
 
   const handleChangeConfigurationName = async (e) => {
-    setConfigurationName(e.target.value);
+    const selectedConfigurationName = e.target.value;
+
+    if (selectedConfigurationName === "") {
+      setConfigurationName("");
+      setParameterNames([]);
+      return;
+    }
+
+    setConfigurationName(selectedConfigurationName);
     setParameterNames([]);
-    console.log(e.target.value);
+
     try {
       const response =
         await ParameterGroupService.getParameterNamesByConfigurationName(
-          e.target.value
+          selectedConfigurationName
         );
-      console.log("parameter names: ", response);
       setParameterNames(response);
     } catch (error) {
-      console.log("error: ", error);
+      toast.error(
+        "İlgili konfigürasyon parametrelerine bağlı parametre grupları alınamadı."
+      );
     }
   };
 

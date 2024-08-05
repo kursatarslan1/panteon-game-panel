@@ -12,6 +12,7 @@ import {
 import ConfigurationService from "../../../services/ConfigurationService";
 import ParameterGroupService from "../../../services/ParameterGroupService";
 import { v4 as uuidv4 } from "uuid";
+import { toast } from "react-toastify";
 
 const ParameterGroups = () => {
   const [configurationName, setConfigurationName] = useState("");
@@ -33,7 +34,7 @@ const ParameterGroups = () => {
         );
         setConfigurationParameters(parameters);
       } catch (error) {
-        console.log("Error fetching configuration names: ", error);
+        toast.error("Konfigürasyon parametreleri alınamadı.");
       }
     };
 
@@ -43,7 +44,7 @@ const ParameterGroups = () => {
         const groups = await ParameterGroupService.getParameterGroupList();
         setParameterGroups(groups);
       } catch (error) {
-        console.log("Error fetching parameter groups: ", error);
+        toast.error("Parametre grupları alınamadı.");
       } finally {
         setWaitResponse(false);
       }
@@ -68,11 +69,9 @@ const ParameterGroups = () => {
         setParameterGroups([...parameterGroups, createdItem]);
         setConfigurationName("");
         setParameterName("");
+        toast.success("Parametre grubu başarıyla eklendi.");
       } catch (error) {
-        console.log(
-          "Error adding parameter group: ",
-          error.response ? error.response.data : error.message
-        );
+        toast.error("Parametre grubu eklenirken bir hata oluştu.");
       }
     }
   };
@@ -84,8 +83,9 @@ const ParameterGroups = () => {
       setConfigurationName(item.configurationParameter);
       setParameterName(item.parameterName);
       setShowModal(true);
+      toast.success("Düzenleme işlemi başarıyla tamamlandı.");
     } catch (error) {
-      console.log("update failed: ", error);
+      toast.error("Düzenleme işlemi başarısız oldu.");
     }
   };
 
@@ -111,11 +111,9 @@ const ParameterGroups = () => {
         setConfigurationName("");
         setParameterName("");
         setShowModal(false);
+        toast.success("Düzenleme işlemi başarılı.");
       } catch (error) {
-        console.log(
-          "Error updating parameter group: ",
-          error.response ? error.response.data : error.message
-        );
+        toast.error("Düzenleme işlemi başarısız oldu.");
       }
     }
   };
@@ -126,11 +124,11 @@ const ParameterGroups = () => {
       setParameterGroups(
         parameterGroups.filter((item) => item.parameterId !== id)
       );
-    } catch (error) {
-      console.log(
-        "Error deleting parameter group: ",
-        error.response ? error.response.data : error.message
+      toast.success(
+        "Parametre grubu başarıyla silindi, lütfen kontrollerinizi yapınız."
       );
+    } catch (error) {
+      toast.error("Parametre grubu silinirken bir hata oluştu.");
     }
   };
 

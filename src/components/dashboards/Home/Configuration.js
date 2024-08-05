@@ -12,6 +12,7 @@ import {
 } from "react-bootstrap";
 
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import ConfigurationService from "services/ConfigurationService";
 import { v4 as uuidv4 } from "uuid";
 
@@ -38,7 +39,7 @@ const Configuration = () => {
           return;
         }
       } catch (error) {
-        console.error("Yönetici bilgileri alınırken hata oluştu: ", error);
+        toast.error("Kullanıcı bilgileri alınamadı.");
       }
     };
 
@@ -51,7 +52,7 @@ const Configuration = () => {
       const response = await ConfigurationService.getConfigurationList();
       setConfigurationList(response);
     } catch (error) {
-      console.log("Error fetching configuration list: ", error);
+      toast.error("Konfigürasyon parametreleri alınırken bir hata oluştu.");
     } finally {
       setWaitResponse(false);
     }
@@ -74,8 +75,11 @@ const Configuration = () => {
         setConfigurationName("");
         setConfigurationParameter("");
         fetchConfigurations();
+        toast.success("Ana konfigürasyon parametre kaydı başarıyla eklendi.");
       } catch (error) {
-        console.log("Error adding configuration: ", error);
+        toast.error(
+          "Ana konfigürasyon parametresi eklenirken bir hata oluştu."
+        );
       }
     }
   };
@@ -94,8 +98,9 @@ const Configuration = () => {
         )
       );
       setShowEditModal(false);
+      toast.success("Düzenleme işlemi başarılı.");
     } catch (error) {
-      console.log("Error editing configuration: ", error);
+      toast.error("Düzenleme kaydı başarısız oldu.");
     }
   };
 
@@ -107,8 +112,11 @@ const Configuration = () => {
           (item) => item.configurationId !== configurationId
         )
       );
+      toast.success(
+        "Ana konfigürasyon parametre kaydı silindi, lütfen kontrollerinizi tamamlayınız."
+      );
     } catch (error) {
-      console.log("Error deleting configuration: ", error);
+      toast.error("Ana konfigürasyon parametresi silinirken bir hata oluştu.");
     }
   };
 

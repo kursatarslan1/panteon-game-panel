@@ -87,6 +87,7 @@ const BuildingParameters = () => {
         setBuildingConfigurations([...buildingConfigurations, response]);
         setShowModal(false);
         resetForm();
+        toast.success("Konfigürasyon tanımı başarılı.");
       } catch (error) {
         // setErrorMessage(
         //   "New building configuration could not be added: " + error.message
