@@ -195,7 +195,9 @@ const ParameterDefinitions = () => {
       {/* Modal */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Yeni Parametre Ekle</Modal.Title>
+          <Modal.Title className="text-warning">
+            Yeni Parametre Ekle
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -247,7 +249,7 @@ const ParameterDefinitions = () => {
                 onChange={(e) => setParameterValue(e.target.value)}
               />
             </Form.Group>
-            <Button variant="primary w-25" onClick={handleAdd}>
+            <Button variant="warning w-25" onClick={handleAdd}>
               Ekle
             </Button>
           </Form>

@@ -275,7 +275,7 @@ const BuildingParameters = () => {
       {/* Modal */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>
+          <Modal.Title className="text-warning">
             {isEdit
               ? "Build Parametresini Düzenle"
               : "Yeni Build Parametresi Ekle"}
@@ -328,7 +328,7 @@ const BuildingParameters = () => {
             İptal
           </Button>
           <Button
-            variant="primary"
+            variant="warning"
             className="w-auto"
             onClick={isEdit ? handleUpdate : handleAdd}
           >
