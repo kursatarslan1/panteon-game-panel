@@ -45,12 +45,16 @@ const Registration = () => {
     <>
       <Row className="align-items-center mb-2" md={12} xl={12}>
         <Col>
-          <h5 id="modalLabel">Kayıt Ol</h5>
+          <h5 id="modalLabel" className="text-warning">
+            Kayıt Ol
+          </h5>
         </Col>
         <Col xs="auto">
-          <p className="fs-10 text-600 mb-0">
+          <p className="fs-10 text-600 mb-0 text-warning">
             Hesabın var mı?{" "}
-            <Link to="/authentication/simple/login">Giriş Yap</Link>
+            <Link to="/authentication/simple/login" className="text-warning">
+              Giriş Yap
+            </Link>
           </p>
         </Col>
       </Row>
@@ -73,7 +77,7 @@ const Registration = () => {
           name="password"
           onChange={(e) => setPassword(e.target.value)}
         ></Form.Control>
-        <Button variant="primary w-100 mt-2" onClick={handleSubmit}>
+        <Button variant="warning w-100 mt-2" onClick={handleSubmit}>
           Kayıt Ol
         </Button>
       </Form>
