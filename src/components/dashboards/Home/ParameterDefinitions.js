@@ -6,6 +6,7 @@ import {
   InputGroup,
   FormControl,
   Table,
+  Spinner,
   Modal,
 } from "react-bootstrap";
 import ParameterDefinitionService from "../../../services/ParameterDefinitionService";
@@ -23,15 +24,19 @@ const ParameterDefinitions = () => {
   const [configurationName, setConfigurationName] = useState("");
   const [configurationParameters, setConfigurationParameters] = useState([]);
   const [parameterNames, setParameterNames] = useState([]);
+  const [waitResponse, setWait] = useState(false);
 
   useEffect(() => {
     const fetchParameterDefinitions = async () => {
       try {
+        setWait(true);
         const data =
           await ParameterDefinitionService.getParameterDefinitionList();
         setItems(data);
       } catch (error) {
         console.log("Error fetching parameter definitions: ", error);
+      } finally {
+        setWait(false);
       }
     };
 
@@ -139,8 +144,13 @@ const ParameterDefinitions = () => {
             </InputGroup>
           </Form.Group>
           {/* Tablo Başlıkları */}
-          {filteredItems.length === 0 ? (
-            <div className="text-center">Veri bulunamadı.</div>
+          {waitResponse ? (
+            <div className="text-center">
+              <Spinner animation="border" role="status">
+                <span className="visually-hidden">Yükleniyor...</span>
+              </Spinner>
+              <p>Yükleniyor...</p>
+            </div>
           ) : (
             <Table striped bordered hover>
               <thead>
@@ -152,22 +162,30 @@ const ParameterDefinitions = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredItems.map((item, index) => (
-                  <tr key={index}>
-                    <td>{item.parameterName}</td>
-                    <td>{item.parameterOptions}</td>
-                    <td>{item.parameterValue}</td>
-                    <td>
-                      <Button
-                        variant="danger"
-                        onClick={() => handleDelete(item.definitionId)}
-                        className="w-auto"
-                      >
-                        Sil
-                      </Button>
+                {filteredItems.length > 0 ? (
+                  filteredItems.map((item, index) => (
+                    <tr key={index}>
+                      <td>{item.parameterName}</td>
+                      <td>{item.parameterOptions}</td>
+                      <td>{item.parameterValue}</td>
+                      <td>
+                        <Button
+                          variant="danger"
+                          onClick={() => handleDelete(item.definitionId)}
+                          className="w-auto"
+                        >
+                          Sil
+                        </Button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="4" className="text-center">
+                      Veri bulunamadı
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </Table>
           )}

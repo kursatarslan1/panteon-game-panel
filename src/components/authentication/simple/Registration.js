@@ -10,11 +10,13 @@ const Registration = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [waitResponse, setWaitResponse] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      setWaitResponse(true);
       const data = {
         username,
         email,
@@ -38,6 +40,8 @@ const Registration = () => {
       }
     } catch (error) {
       toast.error("Kayıt olma işlemi başarısız.");
+    } finally {
+      setWaitResponse(false);
     }
   };
 
@@ -67,7 +71,7 @@ const Registration = () => {
         ></Form.Control>
         <Form.Label>Email:</Form.Label>
         <Form.Control
-          type="mail"
+          type="email"
           name="email"
           onChange={(e) => setEmail(e.target.value)}
         ></Form.Control>
@@ -77,8 +81,12 @@ const Registration = () => {
           name="password"
           onChange={(e) => setPassword(e.target.value)}
         ></Form.Control>
-        <Button variant="warning w-100 mt-2" onClick={handleSubmit}>
-          Kayıt Ol
+        <Button
+          variant="warning w-100 mt-2"
+          onClick={handleSubmit}
+          disabled={!username || !email || !password || waitResponse}
+        >
+          {waitResponse ? "Kayıt işlemi sürüyor..." : "Kayıt Ol"}
         </Button>
       </Form>
     </>

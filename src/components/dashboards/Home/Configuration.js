@@ -7,6 +7,7 @@ import {
   InputGroup,
   FormControl,
   Table,
+  Spinner,
   Modal,
 } from "react-bootstrap";
 
@@ -26,6 +27,7 @@ const Configuration = () => {
     configurationName: "",
     configurationParameter: "",
   });
+  const [waitResponse, setWaitResponse] = useState(false);
 
   useEffect(() => {
     const fetchManagerInformation = async () => {
@@ -45,10 +47,13 @@ const Configuration = () => {
 
   const fetchConfigurations = async () => {
     try {
+      setWaitResponse(true);
       const response = await ConfigurationService.getConfigurationList();
       setConfigurationList(response);
     } catch (error) {
       console.log("Error fetching configuration list: ", error);
+    } finally {
+      setWaitResponse(false);
     }
   };
 
@@ -164,8 +169,13 @@ const Configuration = () => {
               />
             </InputGroup>
           </Form.Group>
-          {filteredItems.length === 0 ? (
-            <div className="text-center">Veri bulunamadı.</div>
+          {waitResponse ? (
+            <div className="text-center">
+              <Spinner animation="border" role="status">
+                <span className="visually-hidden">Yükleniyor...</span>
+              </Spinner>
+              <p>Yükleniyor...</p>
+            </div>
           ) : (
             <Table striped bordered hover>
               <thead>
@@ -176,28 +186,36 @@ const Configuration = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredItems.map((item, index) => (
-                  <tr key={index}>
-                    <td>{item.configurationName}</td>
-                    <td>{item.configurationParameter}</td>
-                    <td>
-                      <Button
-                        variant="warning"
-                        className="m-1 w-auto"
-                        onClick={() => openEditModal(item)}
-                      >
-                        Düzenle
-                      </Button>
-                      <Button
-                        variant="danger"
-                        className="m-1 w-auto"
-                        onClick={() => handleDelete(item.configurationId)}
-                      >
-                        Sil
-                      </Button>
+                {filteredItems.length > 0 ? (
+                  filteredItems.map((item, index) => (
+                    <tr key={index}>
+                      <td>{item.configurationName}</td>
+                      <td>{item.configurationParameter}</td>
+                      <td>
+                        <Button
+                          variant="warning"
+                          className="m-1 w-auto"
+                          onClick={() => openEditModal(item)}
+                        >
+                          Düzenle
+                        </Button>
+                        <Button
+                          variant="danger"
+                          className="m-1 w-auto"
+                          onClick={() => handleDelete(item.configurationId)}
+                        >
+                          Sil
+                        </Button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="4" className="text-center">
+                      Veri Bulunamadı.
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </Table>
           )}
